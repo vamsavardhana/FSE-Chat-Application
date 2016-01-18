@@ -22,7 +22,7 @@ app.get('/exit', function(req, res){
 io.sockets.on('connection', function(socket) {
     db.serialize(function () {
 
-        db.run("CREATE TABLE if not exists user_info (info TEXT)");
+        db.run("create table if not exists user_info (name text,msg text, info text)");
 
     });
     console.log("Server started and table created");
@@ -41,7 +41,7 @@ io.sockets.on('connection', function(socket) {
             socket.nickname = data;
             nicknames.push(socket.nickname);
             updateNicknames();
-            db.each("SELECT name,msg,time info from user_info limit 5", function(err, row) {
+            db.each("SELECT name,msg,info from user_info limit 5", function(err, row) {
                 console.log(row);
                 io.sockets.emit('new message', row);
 
